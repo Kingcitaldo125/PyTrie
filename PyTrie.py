@@ -23,25 +23,21 @@ class Trie(object):
 			print()
 			self.traverse(root.map[k], k)
 			
-	def get_words_help(self, node, xlist, path, plen):
+	def get_words_help(self, node, xlist, path):
 		if not node:
 			return
 
 		if node.is_leaf:
-			xlist.append(''.join(path[:plen]))
-			return
+			xlist.append(''.join(path))
 
-		for k in node.map.keys():
-			if(len(path) <= plen):
-				path.append(k)
-			else:
-				path[plen] = k
-			self.get_words_help(node.map[k], xlist, path, plen+1)
+		for key in node.map:
+			path.append(key)
+			self.get_words_help(node.map[key], xlist, path)
+			path.pop()
 
 	def get_words(self):
 		xlist = []
-		for start in self.map.keys():
-			self.get_words_help(self, xlist, [], 0)
+		self.get_words_help(self, xlist, [])
 		return xlist
 
 	def exists(self, word):
@@ -65,8 +61,9 @@ t = Trie()
 t.insert("hello")
 t.insert("heck")
 t.insert("help")
+t.insert("tangent")
 
-print("Words:")
+print("words:")
 for word in t.get_words():
 	print(word)
 
